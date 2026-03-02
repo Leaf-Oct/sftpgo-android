@@ -37,16 +37,25 @@ Developing...
 ## Project Structure 项目结构
 
 sftpgo-android
+
 ├── app/	安卓项目代码 Android app code
+
 ├── build.gradle 
+
 ├── gradle/
+
 ├── gradle.properties
+
 ├── gradlew
+
 ├── gradlew.bat
+
 ├── img/	存放README图片 save README images
-├── local.properties
+
 ├── README.md
+
 ├── settings.gradle
+
 └── sftpgo-2.7.0/ sftpgo源码 sftpgo source code
 
 ## What changed in SFTPGO? 对SFTPGO做了什么修改
