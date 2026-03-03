@@ -109,6 +109,14 @@ func Execute() {
 	}
 }
 
+func ExecuteWithArgs(config_path string, log_path string) {
+	rootCmd.SetArgs([]string{"serve", "-c", config_path, "-l", log_path})
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
 func addConfigFlags(cmd *cobra.Command) {
 	viper.SetDefault(configDirKey, defaultConfigDir)
 	viper.BindEnv(configDirKey, "SFTPGO_CONFIG_DIR") //nolint:errcheck // err is not nil only if the key to bind is missing
