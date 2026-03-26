@@ -22,10 +22,14 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -35,6 +39,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+
     // Source: https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
     implementation("com.alibaba.fastjson2:fastjson2:2.0.61")
 //    testImplementation libs.junit

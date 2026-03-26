@@ -13,13 +13,19 @@
         android:theme="@style/Theme.Sftpgo4Android"
         tools:targetApi="31">
         <activity
+            android:name=".activity.LogActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.EditActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.ConfigActivity"
             android:exported="false" />
 
         <service
             android:name=".service.SftpgoService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity
             android:name=".activity.MainActivity"
