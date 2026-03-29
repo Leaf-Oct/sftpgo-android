@@ -39,7 +39,7 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
-
+    implementation(fileTree('libs'))
     // Source: https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
     implementation("com.alibaba.fastjson2:fastjson2:2.0.61")
 //    testImplementation libs.junit
