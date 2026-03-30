@@ -1,5 +1,6 @@
 package cn.leaf.sftpgo.android.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import cn.leaf.sftpgo.android.databinding.FragmentSwitchBinding;
+import cn.leaf.sftpgo.android.service.SftpgoService;
 
 public class SwitchFragment extends Fragment {
     private FragmentSwitchBinding binding;
@@ -26,10 +28,10 @@ public class SwitchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding.switchMain.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
-                binding.sftpStatus.setText("SFTPGO已启动");
+                getActivity().startService(new Intent(getActivity(), SftpgoService.class));
             }
             else {
-                binding.sftpStatus.setText("SFTPGO已停止");
+                getActivity().stopService(new Intent(getActivity(), SftpgoService.class));
             }
         });
     }
