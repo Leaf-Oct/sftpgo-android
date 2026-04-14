@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONObject;
+
 import cn.leaf.sftpgo.android.R;
 import cn.leaf.sftpgo.android.databinding.FragmentSettingBinding;
 
@@ -39,12 +41,16 @@ public class SettingFragment extends Fragment {
             switch (position){
                 case 0:
 //                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new PortFragment()).commit();
+                    var edit_port_fragment=new EditPortFragment();
+                    edit_port_fragment.show(requireActivity().getSupportFragmentManager(),"编辑端口");
                     break;
                 case 1:
 //                    requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new SwitchFragment()).commit();
                     break;
                 case 2:
 //                    requireActivity().getSupportFragmentManager().beginTransaction().replace()
+
+                    break;
             }
         });
     }

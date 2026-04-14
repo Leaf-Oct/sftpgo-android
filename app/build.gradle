@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'cn.leaf.sftpgo.android'
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "cn.leaf.sftpgo.android"
         minSdk 30
-        targetSdk 35
+        targetSdk 36
         versionCode 1
         versionName "1.0"
 
@@ -26,6 +26,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
+        coreLibraryDesugaringEnabled true
     }
     buildFeatures {
         viewBinding true
@@ -38,7 +39,9 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     implementation(fileTree('libs'))
+//    其实不太需要，JDK自带json解析库。在解析单个json文件时，跟gson, fastjson等没有显著差距
     // Source: https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2
-    implementation("com.alibaba.fastjson2:fastjson2:2.0.61")
+//    implementation("com.alibaba.fastjson2:fastjson2:2.0.61")
 }
