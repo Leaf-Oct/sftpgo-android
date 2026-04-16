@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.AboutFragment"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="简介"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="该app将知名开源项目sftpgo(https://sftpgo.com/)适配至Android系统上，使得老旧Android设备可用作文件存储服务器。"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="功能"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- 启用与停止sftpgo服务\n- 编辑sftpgo中sftp, ftp, webdav, http端口\n- 允许第三方文本编辑器编辑sftpgo.json配置文件，以满足部分用户的高级功能需求\n- 可将sftpgo日志导出至外部其他目录，供分析\n- sftpgo的资源文件保存于app外部目录conf中，日志保存于logs目录中"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="未来计划"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- 接入shizuku或者root权限，以便访问某些特殊目录或系统目录\n- 绘制一个新的图标\n- 优化包体大小。当前go编译出的sftpgo库显著大于官方构建发布的版本\n- 服务状态检测\n- 新增申请后台权限"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开源地址"
+        android:textSize="20sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="https://github.com/Leaf-Oct/sftpgo-android"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16sp"
+        android:text="图标来自sftpgo源码仓库"/>
+
+</LinearLayout>
