@@ -26,11 +26,11 @@ import sftpgo_android.Sftpgo_android;
 public class SftpgoService extends Service {
 
     private static final String CHANNEL_ID = "sftpgo_channel";
-    private static final int NOTIFICATION_ID = 1;
+//    private static final int NOTIFICATION_ID = 1;
     private HandlerThread sftpgo_thread;
     private Handler handler;
 
-    private boolean isRunning = false;
+    public static boolean isRunning = false;
 
     @Override
     public void onCreate() {
@@ -38,7 +38,13 @@ public class SftpgoService extends Service {
         sftpgo_thread = new HandlerThread("sftpgo_thread");
         sftpgo_thread.start();
         handler = new Handler(sftpgo_thread.getLooper());
-        createNotificationChannel();
+        NotificationChannel serviceChannel = new NotificationChannel(
+                CHANNEL_ID,
+                "Sftpgo Service Channel",
+                NotificationManager.IMPORTANCE_DEFAULT
+        );
+        serviceChannel.setDescription("SFTPGO 前台服务");
+        getSystemService(NotificationManager.class).createNotificationChannel(serviceChannel);
     }
 
     @Override
@@ -52,7 +58,8 @@ public class SftpgoService extends Service {
         if (isRunning) {
             return START_NOT_STICKY;
         }
-        startForeground(NOTIFICATION_ID, createNotification());
+//        startForeground(NOTIFICATION_ID, createNotification());
+        startForeground(1, createNotification());
         handler.post(() -> {
             try {
                 Sftpgo_android.sftpgoStart(getExternalFilesDir("conf").getAbsolutePath(), new File(getExternalFilesDir("logs"), "sftpgo.log").getAbsolutePath());
@@ -70,16 +77,7 @@ public class SftpgoService extends Service {
         if (isRunning) {
             Sftpgo_android.sftpgoStop();
         }
-    }
-
-    private void createNotificationChannel() {
-        NotificationChannel serviceChannel = new NotificationChannel(
-                CHANNEL_ID,
-                "Sftpgo Service Channel",
-                NotificationManager.IMPORTANCE_DEFAULT
-        );
-        serviceChannel.setDescription("SFTPGO 前台服务");
-        getSystemService(NotificationManager.class).createNotificationChannel(serviceChannel);
+        getSystemService(NotificationManager.class).deleteNotificationChannel(CHANNEL_ID);
     }
 
     private Notification createNotification() {
