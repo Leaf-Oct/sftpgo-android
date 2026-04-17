@@ -45,7 +45,13 @@ public class SwitchFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (SftpgoService.isRunning){
 
+        }
 
+    }
+
+    private boolean healthCheck(){
+        return false;
     }
 }

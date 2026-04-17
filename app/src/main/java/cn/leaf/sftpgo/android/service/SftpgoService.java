@@ -76,6 +76,7 @@ public class SftpgoService extends Service {
         super.onDestroy();
         if (isRunning) {
             Sftpgo_android.sftpgoStop();
+            isRunning = false;
         }
         getSystemService(NotificationManager.class).deleteNotificationChannel(CHANNEL_ID);
     }
