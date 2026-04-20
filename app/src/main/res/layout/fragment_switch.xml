@@ -10,7 +10,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="24sp"
         android:layout_marginBottom="32dp"
-        android:text="SFTP服务总开关"
+        android:text="SFTPGO服务总开关"
         />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -24,7 +24,7 @@
 
 
     <TextView
-        android:id="@+id/sftp_status"
+        android:id="@+id/sftpgo_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="当前状态：关闭"
