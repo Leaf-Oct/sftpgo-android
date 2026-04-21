@@ -27,6 +27,7 @@
         android:id="@+id/sftpgo_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="32sp"
         android:text="当前状态：关闭"
         android:textSize="18sp"
         android:textColor="#666666"
