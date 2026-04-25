@@ -169,4 +169,4 @@ If it still report `unable to import bind: no Go package in golang.org/x/mobile/
 go get golang.org/x/mobile/bind
 ```
 
-Finally, get sftpgo.aar and sftpgo-sources.jar最后得到sftpgo.aar和
+Finally, get sftpgo.aar and sftpgo-sources.jar
