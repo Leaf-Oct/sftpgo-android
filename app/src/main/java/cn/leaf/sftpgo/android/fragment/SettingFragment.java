@@ -70,7 +70,21 @@ public class SettingFragment extends Fragment {
                 }
             }
     );
-    private String[] setting_items={"端口配置", "高级设置", "导出日志", "关于"};
+
+    private ActivityResultLauncher<Intent> config_export_dir_picker_launcher=registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
+                    var tree_uri = result.getData().getData();
+                    if (tree_uri != null){
+//                        TODO
+                    }
+                }
+            }
+    );
+
+
+    private String[] setting_items={"端口配置", "高级设置", "导出日志","导出配置" ,"导入配置", "关于"};
 
     @Nullable
     @Override
@@ -92,8 +106,6 @@ public class SettingFragment extends Fragment {
         binding.listViewSettings.setOnItemClickListener((parent, view1, position, id) -> {
             switch (position){
                 case 0:
-//                    var edit_port_fragment=new EditPortFragment();
-//                    edit_port_fragment.show(requireActivity().getSupportFragmentManager(),"编辑端口");
                     new EditPortFragment().show(requireActivity().getSupportFragmentManager(),"编辑端口");
                     break;
                 case 1:
@@ -122,6 +134,12 @@ public class SettingFragment extends Fragment {
                     log_export_dir_picker_launcher.launch(intent);
                     break;
                 case 3:
+                    //TODO
+                    break;
+                case 4:
+                    //TODO
+                    break;
+                case 5:
                     new AboutFragment().show(requireActivity().getSupportFragmentManager(),"注: 本APP非SFTPGO官方!!!");
                     break;
             }
