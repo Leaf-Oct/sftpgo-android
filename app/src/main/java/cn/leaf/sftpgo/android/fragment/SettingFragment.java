@@ -24,6 +24,9 @@ import org.json.JSONObject;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import cn.leaf.sftpgo.android.R;
 import cn.leaf.sftpgo.android.databinding.FragmentSettingBinding;
@@ -37,28 +40,35 @@ public class SettingFragment extends Fragment {
                     var tree_uri = result.getData().getData();
                     if (tree_uri != null){
                         try {
-                            var sftpgo_log_file=new File(requireActivity().getExternalFilesDir("logs"), "sftpgo.log");
-                            var target_file= DocumentFile.fromTreeUri(requireContext(),tree_uri).findFile("sftpgo.log");
+                            var log_file_name="sftpgo-log.zip";
+                            var target_file= DocumentFile.fromTreeUri(requireContext(),tree_uri).findFile(log_file_name);
                             Uri target_uri=null;
                             if (target_file!=null&&target_file.exists()){
                                 target_uri=target_file.getUri();
                             } else {
-                                target_uri=DocumentFile.fromTreeUri(requireContext(), tree_uri).createFile("application/octet-stream", "sftpgo.log").getUri();
+                                target_uri=DocumentFile.fromTreeUri(requireContext(), tree_uri).createFile("application/zip", log_file_name).getUri();
                             }
-                            var in=new FileInputStream(sftpgo_log_file);
+
                             var out_stream=getContext().getContentResolver().openOutputStream(target_uri, "wt");
                             if (out_stream==null){
                                 throw new RuntimeException("无法打开输出流");
                             }
-                            var bo=new BufferedOutputStream(out_stream);
+                            var zip_output_stream=new ZipOutputStream(out_stream);
                             byte[] buffer=new byte[8192];
                             int length=0;
-                            while ((length=in.read(buffer))>0){
-                                bo.write(buffer,0,length);
-                                bo.flush();
+                            for (var f:requireActivity().getExternalFilesDir("logs").listFiles()){
+                                if (f.isDirectory()){
+                                    continue;
+                                }
+                                zip_output_stream.putNextEntry(new ZipEntry(f.getName()));
+                                var fis=new FileInputStream(f);
+                                while ((length=fis.read(buffer))!=-1){
+                                    zip_output_stream.write(buffer, 0, length);
+                                    zip_output_stream.flush();
+                                }
+                                zip_output_stream.closeEntry();
                             }
-                            in.close();
-                            bo.close();
+                            zip_output_stream.close();
                             Toast.makeText(requireContext(), "保存成功", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
                             Toast.makeText(requireContext(), "导出日志失败", Toast.LENGTH_SHORT).show();
@@ -77,14 +87,42 @@ public class SettingFragment extends Fragment {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
                     var tree_uri = result.getData().getData();
                     if (tree_uri != null){
-//                        TODO
+                        var sftpgo_db_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
+                        var target_file= DocumentFile.fromTreeUri(requireContext(),tree_uri).findFile("sftpgo-backup.db");
+                        Uri target_uri=null;
+                        if (target_file!=null&&target_file.exists()){
+                            target_uri=target_file.getUri();
+                        } else {
+                            target_uri=DocumentFile.fromTreeUri(requireContext(), tree_uri).createFile("application/octet-stream", "sftpgo-backup.db").getUri();
+                        }
+                        try {
+                            var in=new FileInputStream(sftpgo_db_file);
+                            var out_stream=getContext().getContentResolver().openOutputStream(target_uri, "wt");
+                            if (out_stream==null){
+                                throw new RuntimeException("无法打开输出流");
+                            }
+                            var bo=new BufferedOutputStream(out_stream);
+                            byte[] buffer=new byte[8192];
+                            int length=0;
+                            while ((length=in.read(buffer))>0){
+                                bo.write(buffer,0,length);
+                                bo.flush();
+                            }
+                            in.close();
+                            bo.close();
+                            Toast.makeText(requireContext(), "导出配置成功", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e){
+                            Toast.makeText(requireContext(), "导出配置失败", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(requireContext(),"未获取到目录URI",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
     );
 
 
-    private String[] setting_items={"端口配置", "高级设置", "导出日志","导出配置" ,"导入配置", "关于"};
+    private String[] setting_items={"端口配置", "高级设置", "导出日志","导出数据" ,"导入配置", "关于"};
 
     @Nullable
     @Override
@@ -125,19 +163,24 @@ public class SettingFragment extends Fragment {
                     }
                     break;
                 case 2:
-                    var logFile = new File(requireActivity().getExternalFilesDir("logs"), "sftpgo.log");
-                    if (!logFile.exists()) {
+                    var log_dir=requireActivity().getExternalFilesDir("logs");
+                    if (log_dir==null||log_dir.list().length==0){
                         Toast.makeText(requireContext(), "无日志", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-                    log_export_dir_picker_launcher.launch(intent);
+                    log_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
                     break;
                 case 3:
-                    //TODO
+                    var data_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
+                    if (!data_file.exists()){
+                        Toast.makeText(requireContext(), "无数据文件", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    config_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
                     break;
                 case 4:
-                    //TODO
+
+
                     break;
                 case 5:
                     new AboutFragment().show(requireActivity().getSupportFragmentManager(),"注: 本APP非SFTPGO官方!!!");
