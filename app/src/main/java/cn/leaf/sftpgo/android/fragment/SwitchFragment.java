@@ -55,7 +55,7 @@ public class SwitchFragment extends Fragment {
         binding.switchMain.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 getActivity().startService(new Intent(getActivity(), SftpgoService.class));
-                healthCheck();
+                healthCheck(3000);
             } else {
                 getActivity().stopService(new Intent(getActivity(), SftpgoService.class));
                 sftpgo_status.setText("当前状态：关闭");
@@ -75,15 +75,14 @@ public class SwitchFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (SftpgoService.isRunning) {
-            healthCheck();
+            healthCheck(0);
         }
 
     }
 
 
-    private void healthCheck() {
+    private void healthCheck(long time) {
         sftpgo_status.setText("检查sftpgo服务状态中");
-//        binding.switchMain.setActivated(false);
         binding.switchMain.setEnabled(false);
         new Thread(() -> {
             int response_code = 0;
@@ -98,7 +97,7 @@ public class SwitchFragment extends Fragment {
                 http_port = http_binding.getInt("port");
                 Log.i("http_port", String.valueOf(http_port));
                 enable_https = http_binding.getBoolean("enable_https");
-                Thread.sleep(3000);
+                Thread.sleep(time);
                 if (enable_https) {
                     var url = new URL("https://127.0.0.1:" + http_port + "/healthz");
                     var https_connection = (HttpsURLConnection) url.openConnection();

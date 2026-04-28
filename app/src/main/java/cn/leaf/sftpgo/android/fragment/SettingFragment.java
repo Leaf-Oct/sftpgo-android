@@ -21,9 +21,11 @@ import androidx.fragment.app.Fragment;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -81,7 +83,7 @@ public class SettingFragment extends Fragment {
             }
     );
 
-    private ActivityResultLauncher<Intent> config_export_dir_picker_launcher=registerForActivityResult(
+    private ActivityResultLauncher<Intent> db_export_dir_picker_launcher=registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
@@ -121,6 +123,45 @@ public class SettingFragment extends Fragment {
             }
     );
 
+    private ActivityResultLauncher<Intent> load_db_picker_launcher=registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result ->{
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
+                    var file_uri = result.getData().getData();
+                    if (file_uri != null){
+                        try(var in=getContext().getContentResolver().openInputStream(file_uri)){
+                            var buffer=new byte[15];
+                            var length=in.read(buffer);
+                            if (length!=15){
+                                throw new IOException("读文件头长度有误，length="+length);
+                            }
+                            if (!new String(buffer).equals("SQLite format 3")){
+                                throw new IOException("不是sqlite3文件");
+                            }
+                        } catch (IOException e){
+                          Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                          e.printStackTrace();
+                        }
+                        var sftpgo_db_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
+                        if (sftpgo_db_file.exists()){
+                            sftpgo_db_file.delete();
+                        }
+                        try (var in=new BufferedInputStream(getContext().getContentResolver().openInputStream(file_uri))){
+                            var buffer=new byte[8192];
+                            int length=0;
+                            var out=new BufferedOutputStream(new FileOutputStream(sftpgo_db_file));
+                            while ((length=in.read(buffer))>0){
+                                out.write(buffer,0,length);
+                                out.flush();
+                            }
+                        } catch (IOException e){
+                            Toast.makeText(requireContext(), "复制外部db到内部目录失败", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+    );
 
     private String[] setting_items={"端口配置", "高级设置", "导出日志","导出数据" ,"导入配置", "关于"};
 
@@ -176,11 +217,10 @@ public class SettingFragment extends Fragment {
                         Toast.makeText(requireContext(), "无数据文件", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    config_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
+                    db_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
                     break;
                 case 4:
-
-
+                    load_db_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*"));
                     break;
                 case 5:
                     new AboutFragment().show(requireActivity().getSupportFragmentManager(),"注: 本APP非SFTPGO官方!!!");
