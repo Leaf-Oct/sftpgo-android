@@ -2,9 +2,12 @@ package cn.leaf.sftpgo.android.fragment;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,7 +166,7 @@ public class SettingFragment extends Fragment {
             }
     );
 
-    private String[] setting_items={"端口配置", "高级设置", "导出日志","导出数据" ,"导入配置", "关于"};
+    private String[] setting_items={"端口配置", "高级设置", "导出日志","导出数据" ,"导入配置", "关于", "电量管理优化"};
 
     @Nullable
     @Override
@@ -225,6 +228,14 @@ public class SettingFragment extends Fragment {
                 case 5:
                     new AboutFragment().show(requireActivity().getSupportFragmentManager(),"注: 本APP非SFTPGO官方!!!");
                     break;
+                case 6:
+                    var packageName=getActivity().getPackageName();
+                    if(!((PowerManager)getActivity().getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations(packageName)){
+                        startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).setData(Uri.parse("package:"+packageName)));
+                    }
+                    else {
+                        Toast.makeText(requireContext(), "已设置", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
     }
