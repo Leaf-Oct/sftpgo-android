@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -230,6 +231,7 @@ public class SettingFragment extends Fragment {
                     break;
                 case 6:
                     var packageName=getActivity().getPackageName();
+                    Log.i("package name", packageName);
                     if(!((PowerManager)getActivity().getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations(packageName)){
                         startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).setData(Uri.parse("package:"+packageName)));
                     }
