@@ -139,7 +139,7 @@ Use gomobile to produce aar.
 -v Show detail
 
 ```bash
-gomobile bind -target android/arm64 -androidapi 24 -o sftpgo.aar -v
+gomobile bind -target android/arm64 -androidapi 30 -o sftpgo.aar -v -ldflags "-s -w"
 ```
 
 When starting compile, it will report `gomobile: binding "main" package (github.com/drakkan/sftpgo/v2) is not supported`. The reason is that module built for Android can't contain main package. Just change the package name in `main.go`. The main function can be removed, or kept. Anyway, it won't be called.

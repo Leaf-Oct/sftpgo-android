@@ -139,7 +139,7 @@ export ANDROID_HOME=/opt/AndroidSDK
 -v 查看详细信息
 
 ```bash
-gomobile bind -target android/arm64 -androidapi 24 -o sftpgo.aar -v
+gomobile bind -target android/arm64 -androidapi 30 -o sftpgo.aar -v -ldflags "-s -w"
 ```
 
 开始编译的时候会报`gomobile: binding "main" package (github.com/drakkan/sftpgo/v2) is not supported`。原因是编译给安卓的模块，不能有main包。把`main.go`中的包名改一改就行。主函数可以删掉，也可以保留，反正不会调用。
