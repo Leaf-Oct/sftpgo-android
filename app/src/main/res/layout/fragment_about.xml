@@ -48,6 +48,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="16sp"
-        android:text="图标基于sftpgo官方图标绘制"/>
+        android:text="图标基于sftpgo官方图标绘制\n版本 v1.6 Beta"/>
 
 </LinearLayout>
