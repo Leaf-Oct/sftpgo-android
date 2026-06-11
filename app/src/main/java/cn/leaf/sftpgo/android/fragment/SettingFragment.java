@@ -167,7 +167,7 @@ public class SettingFragment extends Fragment {
             }
     );
 
-    private String[] setting_items={"端口配置", "高级设置", "导出日志","导出数据" ,"导入配置", "关于", "电量管理优化"};
+    private String[] setting_items={"端口配置", "高级设置", "导出日志", "关于", "电量管理优化"};
 
     @Nullable
     @Override
@@ -216,20 +216,9 @@ public class SettingFragment extends Fragment {
                     log_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
                     break;
                 case 3:
-                    var data_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
-                    if (!data_file.exists()){
-                        Toast.makeText(requireContext(), "无数据文件", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    db_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
-                    break;
-                case 4:
-                    load_db_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*"));
-                    break;
-                case 5:
                     new AboutFragment().show(requireActivity().getSupportFragmentManager(),"注: 本APP非SFTPGO官方!!!");
                     break;
-                case 6:
+                case 4:
                     var packageName=getActivity().getPackageName();
                     Log.i("package name", packageName);
                     if(!((PowerManager)getActivity().getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations(packageName)){
