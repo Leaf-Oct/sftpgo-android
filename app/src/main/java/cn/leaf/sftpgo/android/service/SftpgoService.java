@@ -1,6 +1,5 @@
 package cn.leaf.sftpgo.android.service;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,16 +7,12 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.PowerManager;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 
 import java.io.File;
 
@@ -28,7 +23,7 @@ import sftpgo_android.Sftpgo_android;
 public class SftpgoService extends Service {
 
     private static final String CHANNEL_ID = "sftpgo_channel";
-    private HandlerThread sftpgo_thread;
+//    private HandlerThread sftpgo_thread;
     private Handler handler;
 
     public static boolean isRunning = false;
@@ -38,7 +33,7 @@ public class SftpgoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        sftpgo_thread = new HandlerThread("sftpgo_thread");
+        var sftpgo_thread = new HandlerThread("sftpgo_thread");
         sftpgo_thread.start();
         handler = new Handler(sftpgo_thread.getLooper());
         wake_lock=((PowerManager)getSystemService(Context.POWER_SERVICE)).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getPackageName()+":sftpgo");
