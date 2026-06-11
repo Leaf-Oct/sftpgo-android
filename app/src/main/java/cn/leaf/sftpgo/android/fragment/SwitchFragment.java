@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,11 +41,14 @@ public class SwitchFragment extends Fragment {
     private FragmentSwitchBinding binding;
     private TextView sftpgo_status;
 
+//    private ImageButton health_check;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSwitchBinding.inflate(inflater, container, false);
         sftpgo_status = binding.sftpgoStatus;
+        binding.healthCheck.setEnabled(false);
         return binding.getRoot();
     }
 
@@ -60,7 +64,11 @@ public class SwitchFragment extends Fragment {
                 sftpgo_status.setText("当前状态：关闭");
                 sftpgo_status.setClickable(false);
                 sftpgo_status.setOnClickListener(null);
+                binding.healthCheck.setEnabled(false);
             }
+        });
+        binding.healthCheck.setOnClickListener(v -> {
+            healthCheck(3000);
         });
     }
 
@@ -83,6 +91,7 @@ public class SwitchFragment extends Fragment {
     private void healthCheck(long time) {
         sftpgo_status.setText("检查sftpgo服务状态中");
         binding.switchMain.setEnabled(false);
+        binding.healthCheck.setEnabled(false);
         new Thread(() -> {
             int response_code = 0;
             String response_message = null;
@@ -138,6 +147,7 @@ public class SwitchFragment extends Fragment {
                         dialog.show();
                     });
                     binding.switchMain.setEnabled(true);
+                    binding.healthCheck.setEnabled(true);
                 });
                 System.gc();
             }
