@@ -170,3 +170,9 @@ go get golang.org/x/mobile/bind
 ```
 
 Finally, get sftpgo.aar and sftpgo-sources.jar
+
+## TODO
+
+- Support more language. At least Chinese and English.
+- Run with Root or Shizuku, acquire higher permission to read and write files. 
+- Allow customize sftpgo boot parameter.
