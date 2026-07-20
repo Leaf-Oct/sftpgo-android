@@ -176,3 +176,4 @@ go get golang.org/x/mobile/bind
 - 多语言支持。最起码支持中英双语吧
 - 通过root或shizuku 启动以允许获取更高权限来读写文件
 - 允许自定义sftpgo启动参数
+- Material 主题

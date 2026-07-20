@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sftpgo4Android</string>
+    <string name="health_check">健康检查</string>
+    <string name="general_switch">SFTPGO服务总开关</string>
+    <string name="current_state_closed">当前状态：关闭</string>
+    <string name="sswitch">开关</string>
+    <string name="setting">设置</string>
 </resources>

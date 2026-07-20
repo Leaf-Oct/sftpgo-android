@@ -41,8 +41,6 @@ public class SwitchFragment extends Fragment {
     private FragmentSwitchBinding binding;
     private TextView sftpgo_status;
 
-//    private ImageButton health_check;
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Sftpgo4Android</string>
+    <string name="health_check">Health Check</string>
+    <string name="general_switch">SFTPGO Service General Switch</string>
+    <string name="current_state_closed">Current State: Closed</string>
+    <string name="sswitch">Switch</string>
+    <string name="setting">设置</string>
 </resources>

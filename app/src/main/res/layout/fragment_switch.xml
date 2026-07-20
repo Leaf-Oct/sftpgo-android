@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/health_check"
-        android:contentDescription="健康检查"
+        android:contentDescription="@string/health_check"
         android:layout_margin="12sp"
         android:background="@android:color/transparent"/>
 
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/health_check"
         android:layout_marginTop="20sp"
-        android:text="健康检查"/>
+        android:text="@string/health_check"/>
 
 
 
@@ -28,7 +28,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="24sp"
         android:layout_marginBottom="32dp"
-        android:text="SFTPGO服务总开关"
+        android:text="@string/general_switch"
         />
 
     <androidx.appcompat.widget.SwitchCompat
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="32sp"
-        android:text="当前状态：关闭"
+        android:text="@string/current_state_closed"
         android:textSize="18sp"
         android:textColor="#666666"
         android:layout_below="@id/switch_main"

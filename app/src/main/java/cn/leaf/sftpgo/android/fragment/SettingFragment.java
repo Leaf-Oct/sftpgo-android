@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -87,87 +88,88 @@ public class SettingFragment extends Fragment {
             }
     );
 
-    private ActivityResultLauncher<Intent> db_export_dir_picker_launcher=registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
-                    var tree_uri = result.getData().getData();
-                    if (tree_uri != null){
-                        var sftpgo_db_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
-                        var target_file= DocumentFile.fromTreeUri(requireContext(),tree_uri).findFile("sftpgo-backup.db");
-                        Uri target_uri=null;
-                        if (target_file!=null&&target_file.exists()){
-                            target_uri=target_file.getUri();
-                        } else {
-                            target_uri=DocumentFile.fromTreeUri(requireContext(), tree_uri).createFile("application/octet-stream", "sftpgo-backup.db").getUri();
-                        }
-                        try {
-                            var in=new FileInputStream(sftpgo_db_file);
-                            var out_stream=getContext().getContentResolver().openOutputStream(target_uri, "wt");
-                            if (out_stream==null){
-                                throw new RuntimeException("无法打开输出流");
-                            }
-                            var bo=new BufferedOutputStream(out_stream);
-                            byte[] buffer=new byte[8192];
-                            int length=0;
-                            while ((length=in.read(buffer))>0){
-                                bo.write(buffer,0,length);
-                                bo.flush();
-                            }
-                            in.close();
-                            bo.close();
-                            Toast.makeText(requireContext(), "导出配置成功", Toast.LENGTH_SHORT).show();
-                        } catch (IOException e){
-                            Toast.makeText(requireContext(), "导出配置失败", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(requireContext(),"未获取到目录URI",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-    );
+//    移除了导入导出的功能，故不再需要
+//    private ActivityResultLauncher<Intent> db_export_dir_picker_launcher=registerForActivityResult(
+//            new ActivityResultContracts.StartActivityForResult(),
+//            result -> {
+//                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
+//                    var tree_uri = result.getData().getData();
+//                    if (tree_uri != null){
+//                        var sftpgo_db_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
+//                        var target_file= DocumentFile.fromTreeUri(requireContext(),tree_uri).findFile("sftpgo-backup.db");
+//                        Uri target_uri=null;
+//                        if (target_file!=null&&target_file.exists()){
+//                            target_uri=target_file.getUri();
+//                        } else {
+//                            target_uri=DocumentFile.fromTreeUri(requireContext(), tree_uri).createFile("application/octet-stream", "sftpgo-backup.db").getUri();
+//                        }
+//                        try {
+//                            var in=new FileInputStream(sftpgo_db_file);
+//                            var out_stream=getContext().getContentResolver().openOutputStream(target_uri, "wt");
+//                            if (out_stream==null){
+//                                throw new RuntimeException("无法打开输出流");
+//                            }
+//                            var bo=new BufferedOutputStream(out_stream);
+//                            byte[] buffer=new byte[8192];
+//                            int length=0;
+//                            while ((length=in.read(buffer))>0){
+//                                bo.write(buffer,0,length);
+//                                bo.flush();
+//                            }
+//                            in.close();
+//                            bo.close();
+//                            Toast.makeText(requireContext(), "导出配置成功", Toast.LENGTH_SHORT).show();
+//                        } catch (IOException e){
+//                            Toast.makeText(requireContext(), "导出配置失败", Toast.LENGTH_SHORT).show();
+//                        }
+//                    } else {
+//                        Toast.makeText(requireContext(),"未获取到目录URI",Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            }
+//    );
+//    移除了导入导出的功能，故不再需要
+//    private ActivityResultLauncher<Intent> load_db_picker_launcher=registerForActivityResult(
+//            new ActivityResultContracts.StartActivityForResult(),
+//            result ->{
+//                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
+//                    var file_uri = result.getData().getData();
+//                    if (file_uri != null){
+//                        try(var in=getContext().getContentResolver().openInputStream(file_uri)){
+//                            var buffer=new byte[15];
+//                            var length=in.read(buffer);
+//                            if (length!=15){
+//                                throw new IOException("读文件头长度有误，length="+length);
+//                            }
+//                            if (!new String(buffer).equals("SQLite format 3")){
+//                                throw new IOException("不是sqlite3文件");
+//                            }
+//                        } catch (IOException e){
+//                          Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                          e.printStackTrace();
+//                        }
+//                        var sftpgo_db_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
+//                        if (sftpgo_db_file.exists()){
+//                            sftpgo_db_file.delete();
+//                        }
+//                        try (var in=new BufferedInputStream(getContext().getContentResolver().openInputStream(file_uri))){
+//                            var buffer=new byte[8192];
+//                            int length=0;
+//                            var out=new BufferedOutputStream(new FileOutputStream(sftpgo_db_file));
+//                            while ((length=in.read(buffer))>0){
+//                                out.write(buffer,0,length);
+//                                out.flush();
+//                            }
+//                        } catch (IOException e){
+//                            Toast.makeText(requireContext(), "复制外部db到内部目录失败", Toast.LENGTH_SHORT).show();
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }
+//            }
+//    );
 
-    private ActivityResultLauncher<Intent> load_db_picker_launcher=registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result ->{
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData()!=null) {
-                    var file_uri = result.getData().getData();
-                    if (file_uri != null){
-                        try(var in=getContext().getContentResolver().openInputStream(file_uri)){
-                            var buffer=new byte[15];
-                            var length=in.read(buffer);
-                            if (length!=15){
-                                throw new IOException("读文件头长度有误，length="+length);
-                            }
-                            if (!new String(buffer).equals("SQLite format 3")){
-                                throw new IOException("不是sqlite3文件");
-                            }
-                        } catch (IOException e){
-                          Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                          e.printStackTrace();
-                        }
-                        var sftpgo_db_file=new File(requireActivity().getExternalFilesDir("conf"), "sftpgo.db");
-                        if (sftpgo_db_file.exists()){
-                            sftpgo_db_file.delete();
-                        }
-                        try (var in=new BufferedInputStream(getContext().getContentResolver().openInputStream(file_uri))){
-                            var buffer=new byte[8192];
-                            int length=0;
-                            var out=new BufferedOutputStream(new FileOutputStream(sftpgo_db_file));
-                            while ((length=in.read(buffer))>0){
-                                out.write(buffer,0,length);
-                                out.flush();
-                            }
-                        } catch (IOException e){
-                            Toast.makeText(requireContext(), "复制外部db到内部目录失败", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-    );
-
-    private String[] setting_items={"端口配置", "高级设置", "导出日志", "关于", "电量管理优化"};
+    private String[] setting_items={"端口配置", "高级设置", "导出日志", "关于", "电量管理优化", "启动模式", "自定义启动参数", "清理日志", "语言"};
 
     @Nullable
     @Override
@@ -214,19 +216,34 @@ public class SettingFragment extends Fragment {
                         return;
                     }
                     log_export_dir_picker_launcher.launch(new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE));
+                    log_dir=null;
                     break;
                 case 3:
                     new AboutFragment().show(requireActivity().getSupportFragmentManager(),"注: 本APP非SFTPGO官方!!!");
                     break;
                 case 4:
                     var packageName=getActivity().getPackageName();
-                    Log.i("package name", packageName);
                     if(!((PowerManager)getActivity().getSystemService(Context.POWER_SERVICE)).isIgnoringBatteryOptimizations(packageName)){
                         startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).setData(Uri.parse("package:"+packageName)));
                     }
                     else {
                         Toast.makeText(requireContext(), "已设置", Toast.LENGTH_SHORT).show();
                     }
+                    break;
+                case 5:
+                    new BootMethodFragment().show(requireActivity().getSupportFragmentManager(),"启动模式");
+                    break;
+                case 6:
+                    Toast.makeText(requireContext(), "开发中", Toast.LENGTH_SHORT).show();
+                    break;
+                case 7:
+                    log_dir=requireActivity().getExternalFilesDir("logs");
+                    if (log_dir!=null){
+                        for (var file: Objects.requireNonNull(log_dir.listFiles())){
+                            file.delete();
+                        }
+                    }
+                    Toast.makeText(requireContext(), "已清理", Toast.LENGTH_SHORT).show();
             }
         });
     }
